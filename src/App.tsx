@@ -10,7 +10,7 @@ import {
   CurrencyDollarIcon,
   GlobeAltIcon,
 } from "@heroicons/react/24/outline";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import moonerBg from "./assets/mooner 6.jpg";
 import moonerAbout from "./assets/mooner 2.jpg";
 
@@ -21,6 +21,7 @@ import { FaXTwitter } from "react-icons/fa6"; // Import X icon from fa6
 function App() {
   const [activeTab, setActiveTab] = useState(0);
   const containerRef = useRef(null);
+  const [copied, setCopied] = useState(false);
 
   // Generate random stars
   const stars = Array.from({ length: 50 }, (_, i) => ({
@@ -108,6 +109,13 @@ function App() {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 1000], [0, 400]);
   const y2 = useTransform(scrollY, [0, 1000], [0, -400]);
+
+  // Add copy function
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText("rNENDZy5Mhq7dgJfKWMzenwxAFCiE2qiyL");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden" ref={containerRef}>
@@ -288,14 +296,17 @@ function App() {
                 Join Now
               </motion.a>
 
-              <motion.button
+              <motion.a
+                href="https://dexscreener.com/xrpl/4D4F4F4E45520000000000000000000000000000.rNENDZy5Mhq7dgJfKWMzenwxAFCiE2qiyL_xrp"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="border-2 border-mooner-500 text-mooner-500 hover:bg-mooner-500/10 
                   font-bold py-3 px-8 rounded-full backdrop-blur-sm"
               >
-                Learn More
-              </motion.button>
+                Chart
+              </motion.a>
             </motion.div>
 
             {/* Enhanced Moon Animation */}
@@ -327,6 +338,64 @@ function App() {
 
                 {/* Moon Shine Effect */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20" />
+              </div>
+            </motion.div>
+
+            {/* Copy Contract Address */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+              className="mt-8"
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <span className="text-sm text-gray-400">Contract Address</span>
+                <div
+                  onClick={handleCopy}
+                  className="group relative flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm px-4 py-2 rounded-lg border border-gray-700/50 cursor-pointer hover:bg-gray-700/50 transition-colors"
+                >
+                  <span className="text-sm md:text-base font-mono text-gray-300">
+                    rNENDZy5Mhq7dgJfKWMzenwxAFCiE2qiyL
+                  </span>
+                  <motion.div
+                    animate={copied ? { scale: [1, 1.2, 1] } : {}}
+                    className="text-mooner-500"
+                  >
+                    {copied ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                        <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                      </svg>
+                    )}
+                  </motion.div>
+
+                  {/* Tooltip */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: copied ? 1 : 0, y: copied ? 0 : 20 }}
+                    className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-mooner-500 text-white text-sm px-2 py-1 rounded"
+                  >
+                    Copied!
+                  </motion.div>
+                </div>
               </div>
             </motion.div>
           </div>
